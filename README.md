@@ -1,1 +1,1 @@
-Stock tracking website for pharmacies
+Pharmacy inventory project backend part
