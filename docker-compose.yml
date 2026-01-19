@@ -1,7 +1,7 @@
 version: '3.8'
 
 services: 
-  # 1. VERİTABANI (KASA)
+  #VERİTABANI
   db:
     image: postgres:15
     container_name: eczane_db
@@ -14,7 +14,7 @@ services:
     networks:
       - eczane-net
 
-  # 2. VERİTABANI YÖNETİM PANELİ (EKRAN)
+  #VERİTABANI YÖNETİM PANELİ
   pgadmin:
     image: dpage/pgadmin4
     container_name: eczane_admin
@@ -28,13 +28,13 @@ services:
     networks:
       - eczane-net
 
-  # 3. SENİN DJANGO PROJEN (BEYİN)
+  #DJANGO 
   backend:
-    build: .  # Yanındaki Dockerfile'ı oku ve inşa et
+    build: .  
     container_name: eczane_backend
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/app # Bilgisayarındaki kod değişikliğini anında içeri aktar (Hot Reload)
+      - .:/app # Bilgisayarındaki kod değişikliğini anında içeri aktarma (Hot Reload)
     ports:
       - "8000:8000"
     depends_on:
