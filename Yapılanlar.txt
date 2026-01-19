@@ -3,3 +3,6 @@ docker-compose up -d
 docker-compose exec backend python manage.py migrate          //Datayı bağlama
 docker-compose exec backend python manage.py createsuperuser  //Admin Paneli
 docker-compose down  
+
+docker-compose restart backend
+docker-compose logs backend
