@@ -1,0 +1,8 @@
+django
+djangorestframework
+psycopg2-binary #Database bağlantısı için
+python-dotenv   #Güvenlik için
+django-cors-headers #Frontend ile backend arasındaki iletişim için
+
+#Pillow
+#drf-yasg

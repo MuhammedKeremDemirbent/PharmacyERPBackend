@@ -1,0 +1,51 @@
+version: '3.8'
+
+services: 
+  # 1. VERİTABANI (KASA)
+  db:
+    image: postgres:15
+    container_name: eczane_db
+    environment:
+      - POSTGRES_DB=eczane_db
+      - POSTGRES_USER=kerem
+      - POSTGRES_PASSWORD=Beyazpano123
+    volumes: #Depolama hafıza bölümü
+      - postgres_data:/var/lib/postgresql/data # Veriler silinmesin diye koruma
+    networks:
+      - eczane-net
+
+  # 2. VERİTABANI YÖNETİM PANELİ (EKRAN)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: eczane_admin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=keremdmrbnt03@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=Beyazpano123
+    ports:
+      - "8080:80" 
+    depends_on:
+      - db
+    networks:
+      - eczane-net
+
+  # 3. SENİN DJANGO PROJEN (BEYİN)
+  backend:
+    build: .  # Yanındaki Dockerfile'ı oku ve inşa et
+    container_name: eczane_backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app # Bilgisayarındaki kod değişikliğini anında içeri aktar (Hot Reload)
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db # Veritabanı açılmadan backend çalışmasın
+    networks:
+      - eczane-net
+
+# OLUŞTURULACAK AĞLAR VE DEPOLAR
+networks:
+  eczane-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
