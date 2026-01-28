@@ -1,3 +1,5 @@
+#Serializer kısmı veriyi çevirmek, anlamak için yazıldı
+
 from rest_framework import serializers
 from .models import Medicine
 
