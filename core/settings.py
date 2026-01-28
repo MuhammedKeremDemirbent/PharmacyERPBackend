@@ -32,6 +32,12 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'inventory',
+    'sales',
+    'patients',
+    'procurement',
+    'rest_framework', #Backend ve Frontendin iletişimi için lazım
+    'corsheaders',    #Cross-Origin Resource Sharing (Güvenlik Engeli)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +47,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', #Güvenlik Engeli -React ile alakalı
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -77,8 +84,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'eczane_db',        # Docker-compose'da belirlediğimiz isim
-        'USER': 'kerem',         # Standart kullanıcı
-        'PASSWORD': 'Beyazpano123', # Senin belirlediğin şifre
+        'USER': 'kerem',            # Standart kullanıcı
+        'PASSWORD': 'Beyazpano123',
         'HOST': 'db',               # DİKKAT: Docker servis adı (localhost değil!)
         'PORT': '5432',
     }

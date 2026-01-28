@@ -6,3 +6,27 @@ docker-compose down
 
 docker-compose restart backend
 docker-compose logs backend
+
+#İlk gün yapılanlar
+
+4 tane app açtık (inventroy, patients, sales, procurement) 
+docker-compose exec backend python manage.py startapp procurement 
+docker-compose exec backend python manage.py startapp inventory 
+docker-compose exec backend python manage.py startapp sales 
+docker-compose exec backend python manage.py startapp patients 
+
+core/settings.py dosyasına gideriz 
+INSTALLED_APPS = [
+    'inventory',
+    'sales',
+    'patients',
+    'procurement',
+    'rest_framework',
+    'corsheaders', ... ] 
+
+MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',... ]
+
+inventory/models.py dosyasına gideriz databaseyi halledince webde görmek için sırasıyla
+docker exec -it eczane_backend python manage.py makemigrations
+ docker exec -it eczane_backend python manage.py migrate
