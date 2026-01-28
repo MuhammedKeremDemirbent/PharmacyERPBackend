@@ -84,13 +84,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'eczane_db',        # Docker-compose'da belirlediğimiz isim
-        'USER': 'kerem',            # Standart kullanıcı
+        'USER': 'kerem',            
         'PASSWORD': 'Beyazpano123',
-        'HOST': 'db',               # DİKKAT: Docker servis adı (localhost değil!)
+        'HOST': 'db',               # Docker servis adı (localhost değil!)
         'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

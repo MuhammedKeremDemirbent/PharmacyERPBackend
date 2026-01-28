@@ -13,6 +13,7 @@ class Medicine(models.Model):
     expiry_date = models.DateField(verbose_name="Son Kullanma Tarihi")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Fiyat")
     form_type = models.CharField(max_length=10, choices=FORM_TYPE, default='TABLET', verbose_name="Hap mı Sıvı mı?")
+    how_many = models.IntegerField(default=0, verbose_name="Stok Adedi")
 
     def __str__(self):
         return self.name   

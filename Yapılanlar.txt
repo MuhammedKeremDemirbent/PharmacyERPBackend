@@ -30,3 +30,5 @@ MIDDLEWARE = [
 inventory/models.py dosyasına gideriz databaseyi halledince webde görmek için sırasıyla
 docker exec -it eczane_backend python manage.py makemigrations
  docker exec -it eczane_backend python manage.py migrate
+
+ #Admin paneline girmek için
