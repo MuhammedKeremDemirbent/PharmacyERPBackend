@@ -62,7 +62,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'core' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,6 +90,35 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+# REDIS CACHE AYARLARI
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# CELERY AYARLARI
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+CELERY_TIMEZONE = "Europe/Istanbul"
+
+# CELERY BEAT AYARLARI 
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'stoklari-kontrol-et-her-dakika': {
+        'task': 'inventory.tasks.check_stock_metrics',
+        'schedule': 60.0,
+    },
+}
+
+# SMTP (E-POSTA) AYARLARI (CONSOLE MODU)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

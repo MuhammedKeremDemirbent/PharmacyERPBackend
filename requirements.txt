@@ -1,8 +1,11 @@
 django
 djangorestframework
-psycopg2-binary #Database bağlantısı için
-python-dotenv   #Güvenlik için
+psycopg2-binary     #Database bağlantısı için
+python-dotenv       #Güvenlik için
 django-cors-headers #Frontend ile backend arasındaki iletişim için
+django-redis #Bellek (Cache) için
+celery       #Arka plan görevleri için
+redis        #Celery ve Cache için Python istemcisig      
 
 #Pillow
 #drf-yasg

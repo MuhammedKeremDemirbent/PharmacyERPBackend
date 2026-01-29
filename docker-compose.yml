@@ -1,6 +1,6 @@
 #version: '3.8'
 
-services: 
+services:
   #VERİTABANI
   db:
     image: postgres:15
@@ -9,7 +9,8 @@ services:
       - POSTGRES_DB=eczane_db
       - POSTGRES_USER=kerem
       - POSTGRES_PASSWORD=Beyazpano123
-    volumes: #Depolama hafıza bölümü
+    volumes:
+      #Depolama hafıza bölümü
       - postgres_data:/var/lib/postgresql/data # Veriler silinmesin diye koruma
     networks:
       - eczane-net
@@ -22,7 +23,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=keremdmrbnt03@gmail.com
       - PGADMIN_DEFAULT_PASSWORD=Beyazpano123
     ports:
-      - "8080:80" 
+      - "8080:80"
     depends_on:
       - db
     networks:
@@ -30,7 +31,7 @@ services:
 
   #DJANGO 
   backend:
-    build: .  
+    build: .
     container_name: eczane_backend
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -39,6 +40,39 @@ services:
       - "8000:8000"
     depends_on:
       - db # Veritabanı açılmadan backend çalışmasın
+    networks:
+      - eczane-net
+
+  #REDIS CACHE
+  redis:
+    image: redis:7-alpine
+    container_name: eczane_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - eczane-net
+
+  # CELERY WORKER 
+  celery_worker:
+    build: .
+    command: celery -A core worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - db
+    networks:
+      - eczane-net
+
+  # CELERY BEAT 
+  celery_beat:
+    build: .
+    command: celery -A core beat --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - db
     networks:
       - eczane-net
 
