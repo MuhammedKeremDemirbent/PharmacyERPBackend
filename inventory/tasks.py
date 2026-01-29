@@ -1,24 +1,34 @@
+# Celery ile görevler oluşturuyoruz ve logluyoruz
+
 from celery import shared_task
-from django.core.mail import send_mail
-import time
+from .models import Medicine
 
 @shared_task
 def check_stock_metrics():
     """
-    Bu görev Celery Worker tarafından arka planda çalıştırılacak.
-    (Simülasyon: Stok kontrolü yapıp rapor atıyor gibi davranır)
+    10'dan az kalan ilaçları raporlar.
     """
     print("Stok Kontrolü Başladı")
-    time.sleep(5) # Uzun süren bir işlemi simüle ediyoruz
-    print("Stok Kontrolü Bitti")
+    
+    #10'dan az ise mesaj gitsin
+    low_stock_medicines = Medicine.objects.filter(how_many__lt=10)
+    
+    if low_stock_medicines.exists():
+        print(f"DİKKAT! {low_stock_medicines.count()} adet ilaç kritik seviyede:")
+        for med in low_stock_medicines:
+            print(f" - {med.name} (Kalan: {med.how_many})")
+            
+        # Buraya ileride 'send_mail' ekleyeceğiz eczacıya mail gidecek
+    else:
+        print("Stok durumu harika! Eksik ilaç yok.")
+        
     return "Kontrol Tamamlandı"
 
 @shared_task
 def send_weekly_report():
     """
-    Bu görev Celery Beat tarafından zamanlanmış olarak çalıştırılacak.
+    Haftalık rapor
     """
-    print("Haftalık Rapor Hazırlanıyor")
-    #mail atma kodu 
+    print("Haftalık Rapor Hazırlanıyor (Zamanlanmış Görev)")
+    # Burada normalde mail atma kodu olur şuan yok
     print("Rapor Gönderildi")
-
