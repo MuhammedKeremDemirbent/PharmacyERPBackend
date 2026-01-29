@@ -18,7 +18,7 @@ def check_stock_metrics():
         for med in low_stock_medicines:
             print(f" - {med.name} (Kalan: {med.how_many})")
             
-        # Buraya ileride 'send_mail' ekleyeceğiz eczacıya mail gidecek
+        # 'send_mail' ekleyeceğiz eczacıya mail gidecek
     else:
         print("Stok durumu harika! Eksik ilaç yok.")
         

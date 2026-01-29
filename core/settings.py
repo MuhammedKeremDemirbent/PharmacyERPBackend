@@ -117,8 +117,12 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-# SMTP (E-POSTA) AYARLARI (CONSOLE MODU)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# SMTP AYARLARI (MAILPIT)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mailpit'     # Docker servis adı
+EMAIL_PORT = 1025          # Mailpit SMTP portu
+EMAIL_USE_TLS = False      # Geliştirme ortamında şifreleme yok
+DEFAULT_FROM_EMAIL = 'admin@eczane.com'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -160,3 +164,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Frontend adresine güvenmek için
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+#çerezlere izin ver
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True

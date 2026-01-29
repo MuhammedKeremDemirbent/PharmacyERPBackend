@@ -76,6 +76,16 @@ services:
     networks:
       - eczane-net
 
+  # MAILPIT SAHTE E-POSTA KUTUSU
+  mailpit:
+    image: axllent/mailpit
+    container_name: eczane_mailpit
+    ports:
+      - "8025:8025" # Web Arayüzü (http://localhost:8025)
+      - "1025:1025" # SMTP Portu (Django buraya atacak)
+    networks:
+      - eczane-net
+
 # OLUŞTURULACAK AĞLAR VE DEPOLAR
 networks:
   eczane-net:

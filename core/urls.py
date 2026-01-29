@@ -25,5 +25,6 @@ urlpatterns = [
     path('inventory/', include('inventory.urls')),
     path('patients/', include('patients.urls')),
     path('procurement/', include('procurement.urls')),
+    path('sales/', include('sales.urls')), # Satış URL'lerini ekledik
     path('', api_home, name='api_home'), # Anasayfa
 ]
