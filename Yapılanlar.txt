@@ -37,7 +37,9 @@ docker exec -it eczane_backend python manage.py makemigrations
 Databaseler halloldu models ve admin.py düzenlendi serializerler hazırlandı
 
 #Redis celery ve cache için requirements dockercompose ve core settings değiştirildi
-celery.py ve __init__.py dosyalarına yapıldı
+celery.py ve __init__.py dosyalarına yapıldı üstüne task.py eklendi görev vermek için
+docker logs pharmacyerpbackend-celery_beat-1 
+docker logs pharmacyerpbackend-celery_worker-1  bunlar ile logları konrol edeceğiz
 
 #SMTP denendi 
 docker-compose exec backend python manage.py shell -c "from django.core.mail import send_mail; send_mail('Merhaba Kerem', 'Bu mail sistemden geliyor!', 'admin@eczane.com', ['test@gmail.com'])"
