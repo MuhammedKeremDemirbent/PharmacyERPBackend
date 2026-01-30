@@ -19,12 +19,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from .views import api_home
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('inventory/', include('inventory.urls')),
     path('patients/', include('patients.urls')),
     path('procurement/', include('procurement.urls')),
-    path('sales/', include('sales.urls')), # Satış URL'lerini ekledik
+    path('sales/', include('sales.urls')),
     path('', api_home, name='api_home'), # Anasayfa
 ]

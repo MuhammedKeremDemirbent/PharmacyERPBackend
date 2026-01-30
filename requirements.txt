@@ -6,6 +6,7 @@ django-cors-headers #Frontend ile backend arasındaki iletişim için
 django-redis #Bellek (Cache) için
 celery       #Arka plan görevleri için
 redis        #Celery ve Cache için Python istemcisig      
+djangorestframework-simplejwt #JWT Auth için
 
 #Pillow
 #drf-yasg

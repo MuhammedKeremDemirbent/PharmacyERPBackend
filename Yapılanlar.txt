@@ -43,3 +43,12 @@ docker logs pharmacyerpbackend-celery_worker-1  bunlar ile logları konrol edece
 
 #SMTP denendi 
 docker-compose exec backend python manage.py shell -c "from django.core.mail import send_mail; send_mail('Merhaba Kerem', 'Bu mail sistemden geliyor!', 'admin@eczane.com', ['test@gmail.com'])"
+
+#User model düzenlendi 
+docker-compose exec backend python manage.py makemigrations accounts
+docker-compose exec backend python manage.py migrate
+
+#Admin paneline giriş 
+docker-compose exec backend python manage.py createsuperuser
+
+docker-compose down -v  herşeyi siler

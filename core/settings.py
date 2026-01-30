@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts',
     'inventory',
     'sales',
     'patients',
@@ -45,6 +46,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication', #Giriş Kartı  
+    )
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', #Güvenlik Engeli -React ile alakalı
@@ -165,6 +172,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+#User Model 
+AUTH_USER_MODEL = 'accounts.User'
 
 # Frontend adresine güvenmek için
 CSRF_TRUSTED_ORIGINS = [
