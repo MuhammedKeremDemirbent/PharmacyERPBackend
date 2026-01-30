@@ -6,3 +6,9 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'password', 'email', 'phone', 'created_at', 'updated_at']
 
+
+class RegisterEmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'phone', 'first_name', 'last_name']
+        # Şifre yok mail ile gelecek
