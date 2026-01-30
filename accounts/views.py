@@ -8,6 +8,8 @@ from django.utils.crypto import get_random_string
 from .models import User
 from .serializers import UserSerializer, RegisterEmployeeSerializer
 
+# Kullanıcı Listeleme ve Oluşturma Mailpit ile Mail Atma(Celery)
+
 class UserListCreateView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -28,7 +30,7 @@ class RegisterEmployeeView(APIView):
             user.save()
             
             # 3. E-Posta Gönder (Açık şifreyi)
-            subject = "Eczane ERP Sistemine Hoşgeldiniz"
+            subject = "Eczane ERP Sistemine Hoşgeldiniz!"
             message = f"""
             Merhaba {user.first_name},
             
