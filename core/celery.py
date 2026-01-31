@@ -7,7 +7,7 @@ app = Celery('core')
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-# tüm tasks.py dosyalarını otomatik bul
+# tüm tasks.py dosyalarını otomatik bulma
 app.autodiscover_tasks()
 
 @app.task(bind=True)

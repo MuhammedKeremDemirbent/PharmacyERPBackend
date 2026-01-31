@@ -6,9 +6,9 @@ services:
     image: postgres:15
     container_name: eczane_db
     environment:
-      - POSTGRES_DB=eczane_db
-      - POSTGRES_USER=kerem
-      - POSTGRES_PASSWORD=Beyazpano123
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
       #Depolama hafıza bölümü
       - postgres_data:/var/lib/postgresql/data # Veriler silinmesin diye koruma
@@ -20,8 +20,8 @@ services:
     image: dpage/pgadmin4
     container_name: eczane_admin
     environment:
-      - PGADMIN_DEFAULT_EMAIL=keremdmrbnt03@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=Beyazpano123
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
     ports:
       - "8080:80"
     depends_on:

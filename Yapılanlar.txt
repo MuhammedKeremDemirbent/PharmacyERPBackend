@@ -9,14 +9,16 @@ docker-compose logs backend
 
 #İlk gün yapılanlar
 
-4 tane app açtık (inventroy, patients, sales, procurement) 
+5 tane app açtık (inventroy, patients, sales, procurement, accounts) 
 docker-compose exec backend python manage.py startapp procurement 
 docker-compose exec backend python manage.py startapp inventory 
 docker-compose exec backend python manage.py startapp sales 
 docker-compose exec backend python manage.py startapp patients 
+docker-compose exec backend python manage.py startapp accounts 
 
 core/settings.py dosyasına gideriz 
 INSTALLED_APPS = [
+    'accounts',
     'inventory',
     'sales',
     'patients',
@@ -29,9 +31,9 @@ MIDDLEWARE = [
 
 inventory/models.py dosyasına gideriz databaseyi halledince webde görmek için sırasıyla
 docker exec -it eczane_backend python manage.py makemigrations
- docker exec -it eczane_backend python manage.py migrate
+docker exec -it eczane_backend python manage.py migrate
 
- #Admin paneline girmek için
+#Admin paneline girmek için
 
 
 Databaseler halloldu models ve admin.py düzenlendi serializerler hazırlandı

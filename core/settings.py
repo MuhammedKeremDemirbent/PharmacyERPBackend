@@ -12,19 +12,21 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv #.env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-w7k$#8ekdq(y42o-$-azrbb8%1dp04b2nhp6chj2gp)mewsagm'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-def-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ["*"]
 
@@ -90,11 +92,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'eczane_db',        # Docker-compose'da belirlediğimiz isim
-        'USER': 'kerem',            
-        'PASSWORD': 'Beyazpano123',
-        'HOST': 'db',               # Docker servis adı (localhost değil!)
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME', 'eczane_db'),
+        'USER': os.getenv('DB_USER', 'bitirme_user'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'bitirme_password'),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
