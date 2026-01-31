@@ -8,7 +8,7 @@ from django.utils.crypto import get_random_string
 from .models import User
 from .serializers import UserSerializer, RegisterEmployeeSerializer
 
-# Kullanıcı Listeleme ve Oluşturma Mailpit ile Mail Atma(Celery)
+# Kullanıcı Listeleme ve Oluşturma Mailpit ile Mail Atma(Celery)   
 
 class UserListCreateView(generics.ListCreateAPIView):
     queryset = User.objects.all()
