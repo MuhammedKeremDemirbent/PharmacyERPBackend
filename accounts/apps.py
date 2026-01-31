@@ -1,3 +1,4 @@
+#Accounts İsmi İçin
 from django.apps import AppConfig
 
 
