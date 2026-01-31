@@ -5,8 +5,8 @@ class Medicine(models.Model):
    
     FORM_TYPE = [
         ('TABLET', 'Hap / Tablet'),
-        ('SIVI/ŞURUP', 'Sıvı / Şurup'),
-        ('DİĞER', 'Diğer'),
+        ('LIQUID', 'Sıvı / Şurup'),
+        ('OTHER', 'Diğer'),
     ]
 
     name = models.CharField(max_length=200, verbose_name="İlaç Adı")
