@@ -14,10 +14,8 @@ class CheckoutView(APIView):
 
         items_data = serializer.validated_data['items']
         
-        # ATOMIC TRANSACTION (Ya hepsi olur, ya hiçbiri olmaz)
-        # Eğer stok düşerken hata olursa, satışı da iptal eder.
+       
         with transaction.atomic():
-            # 1. Satış Kaydı Oluştur
             sale = Sale.objects.create()
             total_price = 0
 
@@ -26,23 +24,19 @@ class CheckoutView(APIView):
                 quantity = item['quantity']
 
                 try:
-                    # Kilitleme (select_for_update): Aynı anda başkası alamasın
                     medicine = Medicine.objects.select_for_update().get(id=product_id)
                 except Medicine.DoesNotExist:
                     return Response({"error": f"Ürün bulunamadı ID: {product_id}"}, status=status.HTTP_404_NOT_FOUND)
 
-                # 2. Stok Kontrolü
                 if medicine.how_many < quantity:
                     return Response(
                         {"error": f"{medicine.name} stoğu yetersiz! (Kalan: {medicine.how_many})"}, 
                         status=status.HTTP_400_BAD_REQUEST
                     )
 
-                # 3. Stoktan Düş
                 medicine.how_many -= quantity
                 medicine.save()
 
-                # 4. Satış Detayı Ekle
                 SaleItem.objects.create(
                     sale=sale,
                     medicine=medicine,
@@ -52,9 +46,13 @@ class CheckoutView(APIView):
                 
                 total_price += medicine.price * quantity
 
-            # Toplam tutarı güncelle
+            # Toplam tutarı güncelleme
             sale.total_amount = total_price
             sale.save()
+
+        #sayı güncelleme
+        # from django.core.cache import cache
+        # cache.clear()
 
         return Response(
             {"message": "Satış Başarılı!", "sale_id": sale.id, "total": total_price}, 
