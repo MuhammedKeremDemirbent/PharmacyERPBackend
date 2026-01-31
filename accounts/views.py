@@ -21,15 +21,15 @@ class RegisterEmployeeView(APIView):
         serializer = RegisterEmployeeSerializer(data=request.data)
         
         if serializer.is_valid():
-            # 1. Rastgele Şifre Üret (8 karakter)
+            # Rastgele şifre üretiriz
             random_password = get_random_string(length=8)
             
-            # 2. Kullanıcıyı Kaydet (Şifreyi Hashle)
+            # Kullanıcıyı kaydederiz şifreyi hashleriz
             user = serializer.save()
             user.set_password(random_password)
             user.save()
             
-            # 3. E-Posta Gönder (Açık şifreyi)
+            # E-Posta Gönderme Kısmı
             subject = "Eczane ERP Sistemine Hoşgeldiniz!"
             message = f"""
             Merhaba {user.first_name},
