@@ -3,12 +3,13 @@ from .models import Sale, SaleItem
 
 class SaleItemInline(admin.TabularInline):
     model = SaleItem
-    extra = 0 # Boş satır gösterme
+    extra = 0 
 
 @admin.register(Sale)
 class SaleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'total_amount', 'created_at') # Listede görünecek sütunlar
-    inlines = [SaleItemInline] # Satışın içine girince ürünleri de göster
+    list_display = ('id', 'user', 'total_amount', 'created_at') 
+    list_filter = ('user', 'created_at') 
+    inlines = [SaleItemInline] 
 
 @admin.register(SaleItem)
 class SaleItemAdmin(admin.ModelAdmin):

@@ -1,8 +1,13 @@
 from django.db import models
 from inventory.models import Medicine  # İlaçları buradan çekeceğiz
 
+from django.conf import settings # User modeli için gerekli
+from patients.models import Patient # Hastayı bağlamak için gerekli
+
 # SATIŞ İŞLEMİ (Fişin Kendisi)
 class Sale(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Satışı Yapan Personel")
+    patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Müşteri") # CRM Bağı
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Satış Tarihi")
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Toplam Tutar")
 

@@ -11,3 +11,4 @@ class SaleItemSerializer(serializers.ModelSerializer):
 
 class CheckoutSerializer(serializers.Serializer):
     items = SaleItemSerializer(many=True)
+    patient_id = serializers.IntegerField(required=False, allow_null=True) # Müşteri ID opsiyonel

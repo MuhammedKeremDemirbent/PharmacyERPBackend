@@ -13,10 +13,12 @@ class CheckoutView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         items_data = serializer.validated_data['items']
+        patient_id = serializer.validated_data.get('patient_id') 
         
        
         with transaction.atomic():
-            sale = Sale.objects.create()
+            # Satışı yapan kişiyi (request.user) ve varsa Müşteriyi kaydetme
+            sale = Sale.objects.create(user=request.user, patient_id=patient_id)
             total_price = 0
 
             for item in items_data:
