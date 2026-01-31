@@ -7,8 +7,8 @@ class SaleItemInline(admin.TabularInline):
 
 @admin.register(Sale)
 class SaleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'total_amount', 'created_at') 
-    list_filter = ('user', 'created_at') 
+    list_display = ('id', 'user', 'patient', 'total_amount', 'created_at') 
+    list_filter = ('user', 'patient', 'created_at') 
     inlines = [SaleItemInline] 
 
 @admin.register(SaleItem)

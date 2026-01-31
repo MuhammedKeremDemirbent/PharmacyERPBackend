@@ -124,6 +124,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'inventory.tasks.check_stock_metrics',
         'schedule': 60.0,
     },
+    'gunluk-ciro-raporu-gece-yarisi': {
+        'task': 'sales.tasks.send_daily_sales_report',
+        'schedule': crontab(hour=0, minute=0), # Her gece 00:00 tarihinde rapor gönderiyoruz
+    },
 }
 
 # SMTP AYARLARI (MAILPIT)
