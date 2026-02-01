@@ -15,8 +15,7 @@ def send_supplier_order_email(supplier_id, order_items, custom_message=None, cus
         
     if not supplier.email:
         return f"{supplier.name} için mail adresi kayıtlı değil."
-
-    # Listeyi oluştur
+        
     items_text = ""
     if order_items:
         items_text += "Sipariş Listesi:\n"
