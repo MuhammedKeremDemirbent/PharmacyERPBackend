@@ -15,6 +15,7 @@ class Medicine(models.Model):
     form_type = models.CharField(max_length=10, choices=FORM_TYPE, default='TABLET', verbose_name="Hap mı Sıvı mı?")
     how_many = models.IntegerField(default=0, verbose_name="Stok Adedi")
     is_active = models.BooleanField(default=True, verbose_name="Aktif mi?")
+    supplier = models.ForeignKey('procurement.Procurement', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Tedarikçi") # Yeni Bağlantı
 
     def __str__(self):
         return self.name   

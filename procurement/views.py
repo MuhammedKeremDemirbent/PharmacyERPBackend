@@ -15,29 +15,23 @@ class ProcurementDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 from django.conf import settings
 
-class SendEmailToSupplierView(APIView):
+class SupplierOrderView(APIView):
     def post(self, request, pk):
         try:
             supplier = Procurement.objects.get(pk=pk)
         except Procurement.DoesNotExist:
             return Response({"error": "Tedarikçi bulunamadı"}, status=status.HTTP_404_NOT_FOUND)
 
-        if not supplier.email:
-            return Response({"error": "Bu tedarikçinin e-posta adresi yok!"}, status=status.HTTP_400_BAD_REQUEST)
+        # Frontend: {"items": [{"name": "Parol", "quantity": 10}]} OR {"message": "..."}
+        order_items = request.data.get('items', [])
+        message = request.data.get('message', '')
+        subject = request.data.get('subject', '')
 
-        # Frontend'den gelen mesajı alamazsak varsayılan bir mesaj atar
-        subject = request.data.get('subject', 'Eczane Sipariş Talebi')
-        message = request.data.get('message', f'Merhaba {supplier.name}, sipariş geçmek istiyoruz.')
+        if not order_items and not message:
+             return Response({"error": "Sipariş listesi veya mesaj boş olamaz!"}, status=status.HTTP_400_BAD_REQUEST)
 
-        sent_count = send_mail(
-            subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL, # Dinamik gönderici adresi
-            [supplier.email],
-            fail_silently=False,
-        )
+        # Celery Task (Async)
+        from .tasks import send_supplier_order_email
+        send_supplier_order_email.delay(supplier.id, order_items, custom_message=message, custom_subject=subject)
 
-        if sent_count > 0:
-             return Response({"message": f"E-posta başarıyla gönderildi: {supplier.email}"}, status=status.HTTP_200_OK)
-        else:
-             return Response({"error": "E-posta gönderilemedi"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({"message": f"Sipariş talebi alındı, e-posta gönderiliyor: {supplier.email}"}, status=status.HTTP_200_OK)
