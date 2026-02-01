@@ -10,6 +10,3 @@ djangorestframework-simplejwt #JWT Auth için
 
 #Pillow
 #drf-yasg
-gunicorn            # Production Sunucusu
-dj-database-url     # DATABASE_URL ortam değişkenini okumak için
-whitenoise          # Statik dosyaları sunmak için
