@@ -4,7 +4,7 @@ from inventory.models import Medicine  # İlaçları buradan çekeceğiz
 from django.conf import settings # User modeli için gerekli
 from patients.models import Patient # Hastayı bağlamak için gerekli
 
-# SATIŞ İŞLEMİ (Fişin Kendisi)
+# SATIŞ İŞLEMİ 
 class Sale(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Satışı Yapan Personel")
     patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Müşteri") # CRM Bağı
@@ -14,7 +14,7 @@ class Sale(models.Model):
     def __str__(self):
         return f"Satış #{self.id} - {self.created_at.strftime('%d.%m.%Y %H:%M')}"
 
-# SATIŞ DETAYI (Fişteki Kalemler)
+# SATIŞ DETAYI
 class SaleItem(models.Model):
     sale = models.ForeignKey(Sale, related_name='items', on_delete=models.CASCADE)
     medicine = models.ForeignKey(Medicine, on_delete=models.PROTECT, verbose_name="Satılan İlaç")

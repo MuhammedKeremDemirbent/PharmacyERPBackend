@@ -43,7 +43,7 @@ class CheckoutView(APIView):
                     sale=sale,
                     medicine=medicine,
                     quantity=quantity,
-                    price=medicine.price # O anki fiyatı kaydet
+                    price=medicine.price # O anki fiyat
                 )
                 
                 total_price += medicine.price * quantity
@@ -55,7 +55,7 @@ class CheckoutView(APIView):
         # from django.core.cache import cache
         # cache.clear()
 
-        # Fatura Mailini Kuyruğa Atma İşlemi (Async)
+        # Fatura Mailini Kuyruğa Atma
         from .tasks import send_sale_receipt_email
         send_sale_receipt_email.delay(sale.id)
 
