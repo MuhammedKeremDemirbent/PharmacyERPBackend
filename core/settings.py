@@ -128,6 +128,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'sales.tasks.send_daily_sales_report',
         'schedule': crontab(hour=0, minute=0), # Her gece 00:00 tarihinde rapor gönderiyoruz
     },
+    'haftalik-kampanya-maili-pazartesi-sabah': {
+        'task': 'patients.tasks.send_weekly_campaign_email',
+        'schedule': crontab(day_of_week=1, hour=9, minute=0), # Pazartesi sabah 09:00
+    },
 }
 
 # SMTP AYARLARI (MAILPIT)
@@ -159,9 +163,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'tr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Istanbul'
 
 USE_I18N = True
 
