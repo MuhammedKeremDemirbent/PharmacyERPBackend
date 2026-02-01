@@ -52,9 +52,12 @@ class CheckoutView(APIView):
             sale.total_amount = total_price
             sale.save()
 
-        #sayı güncelleme
         # from django.core.cache import cache
         # cache.clear()
+
+        # Fatura Mailini Kuyruğa Atma İşlemi (Async)
+        from .tasks import send_sale_receipt_email
+        send_sale_receipt_email.delay(sale.id)
 
         return Response(
             {"message": "Satış Başarılı!", "sale_id": sale.id, "total": total_price}, 
