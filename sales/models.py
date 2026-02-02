@@ -4,6 +4,8 @@ from inventory.models import Medicine  # İlaçları buradan çekeceğiz
 from django.conf import settings # User modeli için gerekli
 from patients.models import Patient # Hastayı bağlamak için gerekli
 
+from django.utils import timezone
+
 # SATIŞ İŞLEMİ 
 class Sale(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Satışı Yapan Personel")
@@ -12,7 +14,8 @@ class Sale(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Toplam Tutar")
 
     def __str__(self):
-        return f"Satış #{self.id} - {self.created_at.strftime('%d.%m.%Y %H:%M')}"
+        local_time = timezone.localtime(self.created_at)
+        return f"Satış #{self.id} - {local_time.strftime('%d.%m.%Y %H:%M')}"
 
 # SATIŞ DETAYI
 class SaleItem(models.Model):

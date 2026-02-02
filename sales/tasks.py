@@ -7,19 +7,20 @@ from django.conf import settings
 
 @shared_task
 def send_daily_sales_report():
-
-    today = timezone.now().date() #Bugünün tarihi
+    # Rapor 00:00'da çalıştığı için "Türkiye Saatine Göre Dün"ü almalıyız.
+    # timezone.localdate() o anki yerel tarihi (TR saatiyle) verir.
+    report_date = timezone.localdate() - timezone.timedelta(days=1)
     
 
-    total_revenue = Sale.objects.filter(created_at__date=today).aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+    total_revenue = Sale.objects.filter(created_at__date=report_date).aggregate(Sum('total_amount'))['total_amount__sum'] or 0
     
-    subject = f"GÜNLÜK RAPOR: {today.strftime('%d.%m.%Y')}"
+    subject = f"GÜNLÜK RAPOR: {report_date.strftime('%d.%m.%Y')}"
     message = f"""
     Sayın Yönetici,
     
     Demirbent Eczanesi Gün Sonu Raporu:
     --------------------------------
-    Tarih: {today.strftime('%d.%m.%Y')}
+    Tarih: {report_date.strftime('%d.%m.%Y')}
     Toplam Ciro: {total_revenue} TL
     
     İyi çalışmalar dileriz.
