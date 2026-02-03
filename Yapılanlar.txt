@@ -54,3 +54,6 @@ docker-compose exec backend python manage.py migrate
 docker-compose exec backend python manage.py createsuperuser
 
 docker-compose down -v  herşeyi siler
+
+
+docker compose exec app sh -c "django test"  içerde çalıştırma

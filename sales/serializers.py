@@ -12,3 +12,10 @@ class SaleItemSerializer(serializers.ModelSerializer):
 class CheckoutSerializer(serializers.Serializer):
     items = SaleItemSerializer(many=True)
     patient_id = serializers.IntegerField(required=False, allow_null=True) # Müşteri ID opsiyonel
+
+class SaleSerializer(serializers.ModelSerializer):
+    items = serializers.StringRelatedField(many=True) # Satılan ürünlerin isimlerini gösterir (basitçe)
+
+    class Meta:
+        model = Sale
+        fields = '__all__'

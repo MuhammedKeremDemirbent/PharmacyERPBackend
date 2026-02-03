@@ -2,9 +2,9 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db import transaction
-from .models import Sale, SaleItem
+from sales.models import Sale, SaleItem
 from inventory.models import Medicine
-from .serializers import CheckoutSerializer
+from sales.serializers import CheckoutSerializer
 
 class CheckoutView(APIView):
     def post(self, request):
@@ -56,7 +56,7 @@ class CheckoutView(APIView):
         # cache.clear()
 
         # Fatura Mailini Kuyruğa Atma
-        from .tasks import send_sale_receipt_email
+        from sales.tasks import send_sale_receipt_email
         send_sale_receipt_email.delay(sale.id)
 
         return Response(

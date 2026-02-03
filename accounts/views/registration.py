@@ -1,19 +1,13 @@
-from rest_framework import generics, status
-from rest_framework.response import Response
+from accounts.serializers import RegisterEmployeeSerializer
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
+from rest_framework import status
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
-from .models import User
-from .serializers import UserSerializer, RegisterEmployeeSerializer
+from rest_framework.permissions import IsAdminUser
 
-# Kullanıcı Listeleme ve Oluşturma Mailpit ile Mail Atma(Celery)      
-  
-class UserListCreateView(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
+# Kullanıcı (adminler) Oluşturma Mailpit ile Mail Atma(Celery)  
 class RegisterEmployeeView(APIView):
     permission_classes = [IsAdminUser] # Sadece Adminler personel ekleyebilir
 
