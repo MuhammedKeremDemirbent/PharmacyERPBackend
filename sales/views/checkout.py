@@ -18,7 +18,8 @@ class CheckoutView(APIView):
        
         with transaction.atomic():
             # Satışı yapan kişiyi (request.user) ve varsa Müşteriyi kaydetme
-            sale = Sale.objects.create(user=request.user, patient_id=patient_id)
+            user = request.user if request.user.is_authenticated else None
+            sale = Sale.objects.create(user=user, patient_id=patient_id)
             total_price = 0
 
             for item in items_data:
@@ -56,8 +57,11 @@ class CheckoutView(APIView):
         # cache.clear()
 
         # Fatura Mailini Kuyruğa Atma
-        from sales.tasks import send_sale_receipt_email
-        send_sale_receipt_email.delay(sale.id)
+        try:
+            from sales.tasks import send_sale_receipt_email
+            send_sale_receipt_email.delay(sale.id)
+        except Exception as e:
+            print(f"Mail kuyruğa eklenemedi: {e}")
 
         return Response(
             {"message": "Satış Başarılı!", "sale_id": sale.id, "total": total_price}, 
