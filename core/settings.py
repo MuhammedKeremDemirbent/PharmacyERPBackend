@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv #.env
+from datetime import timedelta #JWT için süre ayarı
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,12 +48,48 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework_simplejwt',  #JWT'yi çalıştıran ana kütüphanemiz
+    'rest_framework_simplejwt.token_blacklist', #Çıkış yapacak kişinin tokeni blackliste alınır süre dolmasa bile devre dışı kalır.
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication', #Giriş Kartı  
+        'rest_framework_simplejwt.authentication.JWTAuthentication', #Giriş Kartı herkese verecez sistemi doldurmayacağız.
     )
+}
+
+# JWT Ayarlarımız
+SIMPLE_JWT_SIGNING_KEY = os.getenv("SIMPLE_JWT_SIGNING_KEY", os.getenv("SECRET_KEY", "django-insecure-please-change-me"))
+
+ACCESS_TOKEN_TIMEOUT = int(os.getenv("ACCESS_TOKEN_TIMEOUT", 60 * 60))        # 1 Saat
+REFRESH_TOKEN_TIMEOUT = int(os.getenv("REFRESH_TOKEN_TIMEOUT", 60 * 60 * 72)) # 72 Saat Login yapmak gerekir
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=ACCESS_TOKEN_TIMEOUT),
+    'REFRESH_TOKEN_LIFETIME': timedelta(seconds=REFRESH_TOKEN_TIMEOUT),
+    'ROTATE_REFRESH_TOKENS': True,  #Yeni refresh token verir
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SIMPLE_JWT_SIGNING_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM': 'jti',
 }
 
 MIDDLEWARE = [
@@ -121,15 +158,19 @@ from celery.schedules import crontab
 
 CELERY_BEAT_SCHEDULE = {
     'stoklari-kontrol-et-her-dakika': {
-        'task': 'inventory.tasks.check_stock_metrics',
-        'schedule': 60.0,
+        'task': 'inventory.mails.stock_alert.check_stock_metrics',
+        'schedule': 43200.0, #Günde 2 kere ilaç kontrolü
     },
     'gunluk-ciro-raporu-gece-yarisi': {
-        'task': 'sales.tasks.send_daily_sales_report',
+        'task': 'sales.mails.daily_report.send_daily_sales_report',
         'schedule': crontab(hour=0, minute=0), # Her gece 00:00 tarihinde rapor gönderiyoruz
     },
     'haftalik-kampanya-maili-pazartesi-sabah': {
-        'task': 'patients.tasks.send_weekly_campaign_email',
+        'task': 'patients.mails.campaign.send_weekly_campaign_email',
+        'schedule': crontab(day_of_week=1, hour=9, minute=0), # Pazartesi sabah 09:00
+    },
+    'haftalik-genel-rapor-pazartesi': {
+        'task': 'inventory.mails.weekly_report.send_weekly_report',
         'schedule': crontab(day_of_week=1, hour=9, minute=0), # Pazartesi sabah 09:00
     },
 }

@@ -23,32 +23,12 @@ class RegisterEmployeeView(APIView):
             user.set_password(random_password)
             user.save()
             
-            # E-Posta Gönderme Kısmı
-            subject = "Eczane ERP Sistemine Hoşgeldiniz!"
-            message = f"""
-            Merhaba {user.first_name},
-            
-            Eczane ERP sistemine personel kaydınız yapılmıştır.
-            Giriş Bilgileriniz:
-            
-            Kullanıcı Adı: {user.username}
-            Şifre: {random_password}
-            """
-            
-            try:
-                send_mail(
-                    subject,
-                    message,
-                    settings.DEFAULT_FROM_EMAIL,
-                    [user.email],
-                    fail_silently=False,
-                )
-                email_status = "E-posta gönderildi."
-            except Exception as e:
-                email_status = f"E-posta gönderilemedi: {str(e)}"
+            # E-Posta Gönderme Kısmı (Celery - apply_async ile)
+            from accounts.tasks import send_welcome_email
+            send_welcome_email.apply_async(args=[user.id, random_password])
 
             return Response({
-                "message": f"Personel {user.username} oluşturuldu. {email_status}",
+                "message": f"Personel {user.username} oluşturuldu. E-posta kuyruğa eklendi.",
                 "generated_password": random_password 
             }, status=status.HTTP_201_CREATED)
             

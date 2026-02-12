@@ -21,3 +21,6 @@ class MedicineDetailView(generics.RetrieveUpdateDestroyAPIView):
     def perform_destroy(self, instance):
         instance.is_active = False
         instance.save()
+
+
+#modelviewset kullanılacak apilerde

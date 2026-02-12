@@ -57,3 +57,112 @@ docker-compose down -v  herşeyi siler
 
 
 docker compose exec app sh -c "django test"  içerde çalıştırma
+
+SIMPLE_JWT_SIGNING_KEY = os.getenv("SIMPLE_JWT_SIGNING_KEY", os.getenv("SECRET_KEY", "django-insecure-please-change-me"))
+
+# simple_jwt settings
+ACCESS_TOKEN_TIMEOUT = int(os.getenv("ACCESS_TOKEN_TIMEOUT", 60 * 60))
+REFRESH_TOKEN_TIMEOUT = int(os.getenv("REFRESH_TOKEN_TIMEOUT", 60 * 60 * 24))
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=ACCESS_TOKEN_TIMEOUT),
+    'REFRESH_TOKEN_LIFETIME': timedelta(seconds=REFRESH_TOKEN_TIMEOUT),
+    'ROTATE_REFRESH_TOKENS': True,  #Yeni refresh token
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SIMPLE_JWT_SIGNING_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM': 'jti',
+}
+
+
+***** parolamı unuttum --> link gidicek --> frontend link gidecek --> urlden tokeni alıcak o tokenle apiye istek atıcak hem token hem yeni parolası ile atılcak
+parola resetlencek emaildee gönderebilir. redise kaydet tokeni. kullanıcı email = token
+user_password_forgot_verification_token_userıd = token
+--------
+
+mail işlemleri celery ile atılıcak django tarafından trigger 
+celery tasklarını manuel olarak alacaz
+sendx_email.apply_async bunu kullan (delay kullanma) 
+------------
+
+1. View modelviewset -createmodel... bir sürü 
+2. Serializer modelserializer --create update işlemlerinin validasyonunu burada yapılır bazısı viewe kayar
+3.filters query parameters olanlar 
+
+1- view ( modelviewset )
+2- serializer  ( model serializer )
+3- filter ( filtreleremek için olan query paramerlar, filterset fields,  )
+
+itempotents olmasını istiyorsak atomic işlemler araya 3.kişi girmemesi lazım
+itempotents = her çağırılınca aynı sonucu vermesi lazım cachelemek aynı işlemi farklı kişiler aynı anda yapmaması lazım
+------------
+Sahibinden projesi
+webscrapping
+chrome extension
+modele gerek yok
+LLM kullan local llm (ollama)
+
+----------------------------------------------------------
+JWT İLE İLGİLİ BİR KAÇ ÖNEMLİ BİLGİ
+3 bölümden oluşur
+1. Header
+2. Payload
+3. Signature
+
+2 tipi var Access token ve Refresh token
+Access token kısa ömürlü (15 dk - 1 saat)
+Refresh token uzun ömürlü (7 gün - 1 ay)
+Refresh token ile yeni access token alınır
+Refresh token ile yeni refresh token alınır
+
+JWT  settings içine entegre edildi.
+
+
+urls.py FRONTENDDEN GELENLERİ DİNLER -> views.py dosyasını çağırır.
+views.py KONTROL İŞLEMLERİ YAPAR(YETKİ VAR MI, EKSİK BİLGİ VAR MI)-> tasks.py dosyasını çağırır (apply_async ile).
+tasks.py(GELEN İSTEKLERİ GÖNDERİR NEREYE GİTMESİ GEREKİRSE) -> mails/xxxx.py dosyasını çağırır.
+mails/xxxx.py dosyası maili hazırlar ve SMTP sunucusuna teslim eder.
+
+mails klasörü açıldı delaylar kaldırıldı async ile değiştirildi.
+async kuyruğa alır hemen sokmaz sisteme kuyrukta bekleyebilir.
+Hata alırsak tekrar atabileceğiz artık
+
+Kullanıcı tıklayıp çalışan py dosyaları (async)
+password_reset.py
+registration.py
+checkout.py
+procs_mail.py
+
+Zamanlayıcı ile tetiklenen py dosyaları (celery scheduled)
+stock_alert.py
+weekly_report.py
+daily_report.py
+campaign.py
+
+
+idempotency 
+http methodlarından sadece post ve patch hariç diğerleri itempotents olur
+
+stok güncelleme 
+satış yapma
+mail gönderme yerlerinde itempotents kullanacağız 3 4 kere mail atmak satış yapmak istemeyiz.
+
+checkout.py içine ekledik satışta önemli 5 DAKİKADA BİR 
+receipt.py içine ekledik mail gönderme için önemli 24 SAATTE BİR
