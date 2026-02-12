@@ -7,7 +7,7 @@ from django.conf import settings
 
 @shared_task
 def send_daily_sales_report():
-    # Rapor 00:00'da çalıştığı için "Türkiye Saatine Göre Dün"ü almalıyız.
+
     # timezone.localdate() o anki yerel tarihi (TR saatiyle) verir.
     report_date = timezone.localdate() - timezone.timedelta(days=1)
     

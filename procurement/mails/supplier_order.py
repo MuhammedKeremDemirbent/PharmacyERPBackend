@@ -20,8 +20,6 @@ def send_supplier_order_email(supplier_id, order_items, custom_message=None, cus
     if order_items:
         items_text += "Sipariş Listesi:\n"
         for item in order_items:
-            # item dict olabilir veya string olabilir
-            # Eğer dict ise item.get('name'), değilse item
             name = item.get('name') if isinstance(item, dict) else item
             quantity = item.get('quantity', 1) if isinstance(item, dict) else 1
             items_text += f"- {name} : {quantity} Kutu\n"
