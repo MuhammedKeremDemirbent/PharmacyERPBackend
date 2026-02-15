@@ -36,6 +36,8 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app # Bilgisayarındaki kod değişikliğini anında içeri aktarma (Hot Reload)
+    env_file:
+      - .env  # .env dosyasındaki tüm değişkenleri içeri aktar
     ports:
       - "8000:8000"
     depends_on:
@@ -58,6 +60,8 @@ services:
     command: celery -A core worker --loglevel=info
     volumes:
       - .:/app
+    env_file:
+      - .env # Celery de mail şifrelerini bilmeli
     depends_on:
       - redis
       - db
@@ -70,6 +74,8 @@ services:
     command: celery -A core beat --loglevel=info
     volumes:
       - .:/app
+    env_file:
+      - .env # Beat de env'leri bilmeli
     depends_on:
       - redis
       - db
