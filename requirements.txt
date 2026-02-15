@@ -7,6 +7,8 @@ django-redis #Bellek (Cache) için
 celery       #Arka plan görevleri için
 redis        #Celery ve Cache için Python istemcisig      
 djangorestframework-simplejwt #JWT Auth için
+gunicorn
+django-filter
 
 #Pillow
 #drf-yasg
