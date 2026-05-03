@@ -35,3 +35,7 @@ urlpatterns = [
     path('sales/', include('sales.urls')),
     path('', api_home, name='api_home'), # Anasayfa
 ]
+
+#URL kısmının ilk bölümü burada ardından dallama yapıyor gidilecek yerler belirlenir.
+#/inventory --> inventory.urls gibi oradan da medicines geliyor /inventory/medicines olur.
+#Frontendden api/inventory/medicines gelir apiyi vite.config siler.

@@ -1,8 +1,9 @@
 from celery import shared_task
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.conf import settings
-from sales.models import Sale
-from core.idempotent.mail_idempotent import mail_idempotent #idempotency
+from sales.models.models import Sale
+from sales.mails.pdf_creator import generate_sale_receipt_pdf
+from core.idempotent.mail_idempotent import mail_idempotent
 
 @shared_task(bind=True) # bind=True önemli, self argümanı için
 @mail_idempotent(expire=60*60*24) # 24 saat koruma
@@ -13,8 +14,15 @@ def send_sale_receipt_email(self, sale_id):
         return "Satış bulunamadı!"
 
     # Müşterisi maili varsa at
-    if not sale.patient or not sale.patient.email:
-        return f"Satış #{sale_id} için e-posta gönderilemedi (Müşteri yok veya maili yok)."
+    if not sale.patient:
+        print(f"📧 Satış #{sale_id} için Müşteri bulunamadı. İptal.")
+        return f"Satış #{sale_id} için e-posta gönderilemedi (Müşteri yok)."
+    
+    if not sale.patient.email:
+        print(f"📧 Satış #{sale_id} için Müşteri email adresi yok. İptal.")
+        return f"Satış #{sale_id} için e-posta gönderilemedi (Mail adresi yok)."
+
+    print(f"📧 Satış #{sale_id} için mail gönderiliyor: {sale.patient.email}")
 
 
     # Satın alınan ilaçları listeleme
@@ -33,12 +41,21 @@ Toplam Tutar: {sale.total_amount} TL
 Sağlıklı günler dileriz.
 Demirbent Eczanesi"""
 
-    send_mail(
+    # PDF Oluştur
+    pdf_buffer = generate_sale_receipt_pdf(sale_id)
+
+    # EmailMessage Nesnesi Oluştur
+    email = EmailMessage(
         subject=subject,
-        message=message,
+        body=message,
         from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[sale.patient.email],
-        fail_silently=False,
+        to=[sale.patient.email],
     )
 
-    return f"Fatura maili gönderildi: {sale.patient.email}"
+    # PDF'i Ekle
+    email.attach(f"ECZANE_FIS_{sale.id}.pdf", pdf_buffer.getvalue(), 'application/pdf')
+
+    # Gönder
+    email.send(fail_silently=False)
+
+    return f"Fatura maili (PDF ekli) gönderildi: {sale.patient.email}"

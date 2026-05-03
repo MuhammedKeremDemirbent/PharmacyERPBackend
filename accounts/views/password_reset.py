@@ -30,7 +30,7 @@ class ForgotPasswordView(APIView):
         cache.set(redis_key, user.id, timeout=900) # 900 sn = 15 dk
 
         # Mail Linki Oluştur
-        reset_link = f"http://localhost:5173/reset-password?token={token}"
+        reset_link = f"http://localhost:3000/reset-password?token={token}"
         
         subject = "Eczane ERP - Şifre Sıfırlama Talebi"
         message = f"""

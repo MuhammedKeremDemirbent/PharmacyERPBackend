@@ -98,7 +98,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware', #Gelen JWT token'ı doğrular ve isteği yapan kullanıcıyı request.user olarak ayarlar.
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -184,11 +184,11 @@ DEFAULT_FROM_EMAIL = 'admin@eczane.com'
 """
 # SMTP AYARLARI 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com') #smtp.office365.com
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587)) #TLS ve SSL
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
 EMAIL_USE_TLS = True 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')        
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') # Gmail Uygulama Şifresi
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Password validation
@@ -239,6 +239,9 @@ AUTH_USER_MODEL = 'accounts.User'
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost",
 ]
 
 #çerezlere izin ver

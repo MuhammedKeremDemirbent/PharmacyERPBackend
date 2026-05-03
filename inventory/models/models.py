@@ -9,7 +9,8 @@ class Medicine(models.Model):
         ('OTHER', 'Diğer'),
     ]
 
-    name = models.CharField(max_length=200, verbose_name="İlaç Adı")
+    barcode = models.CharField(max_length=13, verbose_name="Barkod", unique=True, null=True, blank=True)
+    name = models.CharField(max_length=50, verbose_name="İlaç Adı")
     expiry_date = models.DateField(verbose_name="Son Kullanma Tarihi")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Fiyat")
     form_type = models.CharField(max_length=10, choices=FORM_TYPE, default='TABLET', verbose_name="Hap mı Sıvı mı?")

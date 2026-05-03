@@ -2,7 +2,7 @@ from functools import wraps
 from django.core.cache import cache
 
 #receipt.py için yaptık
-def mail_idempotent(expire=86400):
+def mail_idempotent(expire=30):
     """
     Mail Task Idempotency Decorator
     Celery tasklarının aynı ID ile tekrar çalışmasını engeller.

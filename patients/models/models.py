@@ -4,6 +4,7 @@ from django.db import models
 
 class Patient(models.Model):
 
+    tc = models.CharField(max_length=11, verbose_name="TC Kimlik Numarası", blank=True, null=True, unique=True)
     first_name = models.CharField(max_length=100, verbose_name="Ad")
     last_name = models.CharField(max_length=100, verbose_name="Soyad")
     phone_number = models.CharField(max_length=15, verbose_name="Telefon Numarası", blank=True, null=True)
