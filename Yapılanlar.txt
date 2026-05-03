@@ -166,3 +166,89 @@ mail gönderme yerlerinde itempotents kullanacağız 3 4 kere mail atmak satış
 
 checkout.py içine ekledik satışta önemli 5 DAKİKADA BİR 
 receipt.py içine ekledik mail gönderme için önemli 24 SAATTE BİR
+
+
+---son yapılanlar---
+
+cloudflare ile
+cloudflared tunnel --url http://localhost:5173 buraya git link gelir
+Vite projesini ilk oluşturduğunuzda, npm run dev dediğinizde Vite kendini otomatik olarak 5173 portundan açar
+
+
+
+YAPILACAKLAR
+
+PDF FORMATINDA FİŞ ATMA 
+TASARIM DÜZELTİLECEK
+
+TEZDE YAZILACAK KONULAR
+
+BACKEND:
+    DOCKERFİLE
+    DOCKERCOMPOSE.YAML
+    DOCKER LOGS
+    DOCKER container
+    DOCKER IMAGE
+
+    ENV:
+        SECRET_KEY
+        DEBUG
+        DB_NAME
+        DB_USER
+        DB_PASSWORD
+        DB_HOST
+        DB_PORT
+        PGADMIN_EMAIL
+        PGADMIN_PASSWORD
+
+        # MAİL AYARLARI 
+        EMAIL_HOST
+        EMAIL_PORT
+        EMAIL_USE_TLS
+        EMAIL_HOST_USER
+        EMAIL_HOST_PASSWORD
+        
+
+    DATABASE:
+        POSTGRES
+    
+    BACKEND LANGUAGE:
+        PYTHON
+        DJANGO
+        DRF (django rest framework)
+        JWT
+        CELERY
+        REDIS
+
+    SMTP:
+        MAILPIT
+        GERÇEK MAİL
+
+
+    API:
+        HTTPREQUEST
+        RESPONSE
+        ...
+        GET 
+        POST
+        PUT
+        DELETE
+
+FRONTEND:
+    TYPESCRIPT
+    REACT
+    VITE
+    SHADCN UI
+    REACT ROUTER
+    REDUX RTK
+
+
+
+reportlab ve pillow ekledik
+        
+
+ALİNİN TAKTİKLER
+
+ilaç stk yaklaşınca mail atabileceğiz
+
+        
