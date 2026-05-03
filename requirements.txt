@@ -9,6 +9,13 @@ redis        #Celery ve Cache için Python istemcisig
 djangorestframework-simplejwt #JWT Auth için
 gunicorn
 django-filter
+reportlab #pdf oluşturmak için
+Pillow  #resim işleyebilmek için
+certifi #SSL sertifikaları için
 
-#Pillow
+#Excel okuma/yazma
+pandas
+openpyxl
+
+
 #drf-yasg
